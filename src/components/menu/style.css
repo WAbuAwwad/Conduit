@@ -1,12 +1,11 @@
 .mytoolbar {
-  background-color: rgb(245, 225, 225);
+  background-color: #d3d3d3;
   color: rgb(8, 35, 110);
 }
 .mycontainer {
   position: relative;
   width: 60%;
   height: 100%;
-  float: right;
   left: 65%;
 }
 .mybtn {
@@ -16,12 +15,13 @@
 }
 a {
   text-decoration: none;
-  color: rgb(8, 35, 110);
+
+  color: rgb(90, 119, 199);
 }
 a:active {
-  color: rgb(90, 119, 199);
+  color: rgb(8, 35, 110);
 }
 
 a:hover {
-  color: rgb(90, 119, 199);
+  color: rgb(8, 35, 110);
 }

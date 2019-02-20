@@ -1,0 +1,9 @@
+.box {
+  max-width: 25%;
+  background-color: rgb(90, 119, 199);
+  display: inline-block;
+}
+.tag {
+  display: inline-block;
+  margin: 2px;
+}

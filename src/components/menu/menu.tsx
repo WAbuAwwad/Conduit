@@ -42,7 +42,7 @@ class Menu extends Component<Props> {
       </span>
     </div>
   );
-  render() {
+  public render() {
     if (this.state.loggedIn) {
       return (
         <Toolbar className="mytoolbar ">
