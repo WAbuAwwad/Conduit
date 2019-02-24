@@ -1,27 +1,10 @@
-.mytoolbar {
-  background-color: #d3d3d3;
-  color: rgb(8, 35, 110);
+.root {
+  flex-grow: 1;
 }
-.mycontainer {
-  position: relative;
-  width: 60%;
-  height: 100%;
-  left: 65%;
+.grow {
+  flex-grow: 1;
 }
-.mybtn {
-  size: "medium";
-  margin: 10px;
-  font-size: 18px;
-}
-a {
-  text-decoration: none;
-
-  color: rgb(90, 119, 199);
-}
-a:active {
-  color: rgb(8, 35, 110);
-}
-
-a:hover {
-  color: rgb(8, 35, 110);
+.menuButton {
+  margin-left: -12;
+  margin-right: 20;
 }

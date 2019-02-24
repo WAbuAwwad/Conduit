@@ -1,42 +1,24 @@
 import * as React from "react";
 import { Component } from "react";
-import Fab from "@material-ui/core/Fab";
 import "./style.css";
+import Chip from "@material-ui/core/Chip";
 
 type Props = {
-  tag: string;
+  tags: string[];
+  clicked: (event: React.MouseEvent<HTMLElement>) => void;
 };
-function Tag(props: Props) {
-  return (
-    <div className="tag">
-      <Fab variant="extended" size="small">
-        # {props.tag}
-      </Fab>
-    </div>
-  );
-}
 
-class Tags extends Component {
-  public state = {
-    tags: []
-  };
-
-  public componentDidMount() {
-    fetch("https://conduit.productionready.io/api/tags") // Call the fetch function passing the url of the API as a parameter
-      .then(res => res.json()) //response type
-      .then(data => {
-        this.setState({ tags: data.tags });
-      })
-      .catch(function() {
-        console.log("Error in fetching tags");
-      });
-  }
-
+class Tags extends Component<Props> {
   public render() {
     return (
-      <div className="box">
-        {this.state.tags.map((item: string, i: number) => (
-          <Tag key={i} tag={item} />
+      <div>
+        {this.props.tags.map((item: string, i: number) => (
+          <Chip
+            key={i}
+            label={item}
+            onClick={this.props.clicked}
+            className="tag"
+          />
         ))}
       </div>
     );

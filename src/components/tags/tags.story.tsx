@@ -1,5 +1,7 @@
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import Tags from "./tags";
-
-storiesOf("tags", module).add("tags", () => <Tags />);
+function clicked() {}
+storiesOf("tags", module).add("tags", () => (
+  <Tags tags={["hi", "walaa"]} clicked={clicked} />
+));

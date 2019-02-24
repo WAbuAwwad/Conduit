@@ -1,8 +1,12 @@
 import * as React from "react";
 import { Component } from "react";
-import Toolbar from "@material-ui/core/Toolbar";
 import "./style.css";
-import { Link } from "@reach/router";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+//import { Router } from "@reach/router";
+
 type Props = {
   loggedIn: boolean;
   userName?: string;
@@ -12,56 +16,38 @@ class Menu extends Component<Props> {
   state = {
     loggedIn: this.props.loggedIn
   };
-
-  public loggedInMenu = (
-    <div className="mycontainer">
-      <span className="mybtn">
-        <Link to="/"> Home</Link>
-      </span>
-      <span className="mybtn">
-        <Link to="/new-article">New Article</Link>
-      </span>
-      <span className="mybtn">
-        <Link to="/settings">Settings</Link>
-      </span>{" "}
-      <span className="mybtn">
-        <Link to="/profile">{this.props.userName}</Link>
-      </span>
-    </div>
-  );
-  public loggedOutMenu = (
-    <div className="mycontainer">
-      <span className="mybtn">
-        <Link to="/"> Home</Link>
-      </span>
-      <span className="mybtn">
-        <Link to="/sign-in"> sign in</Link>
-      </span>
-      <span className="mybtn">
-        <Link to="/sign-up"> sign up</Link>
-      </span>
-    </div>
-  );
   public render() {
-    if (this.state.loggedIn) {
-      return (
-        <Toolbar className="mytoolbar ">
-          <Link to="/">
-            <h1> Conduit</h1>
-          </Link>
-          {this.loggedInMenu}
-        </Toolbar>
-      );
-    } else {
-      return (
-        <Toolbar className="mytoolbar ">
-          <Link to="/">
-            <h1> Conduit</h1>
-          </Link>
-          {this.loggedOutMenu}
-        </Toolbar>
-      );
-    }
+    return (
+      <div className="root">
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" color="inherit" className="grow">
+              Conduit
+            </Typography>
+
+            {this.state.loggedIn ? (
+              <div>
+                <Button color="inherit">Home</Button>
+
+                <Button color="inherit">New Article</Button>
+
+                <Button color="inherit">Settings</Button>
+
+                <Button color="inherit">{this.props.userName}</Button>
+              </div>
+            ) : (
+              <div>
+                <Button color="inherit">Home</Button>
+
+                <Button color="inherit">Sign in</Button>
+
+                <Button color="inherit">Sign up</Button>
+              </div>
+            )}
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
   }
 }
 
