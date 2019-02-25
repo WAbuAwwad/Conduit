@@ -2,21 +2,31 @@ import * as React from "react";
 import { Component } from "react";
 import "./style.css";
 import Chip from "@material-ui/core/Chip";
+import Typography from "@material-ui/core/Typography";
 
-type Props = {
+interface Props {
   tags: string[];
-  clicked: (event: React.MouseEvent<HTMLElement>) => void;
-};
+  handleTag: (tag: string) => void;
+}
 
 class Tags extends Component<Props> {
-  public render() {
+  onClick = (event: React.MouseEvent<HTMLElement>): void => {
+    if (event.target instanceof HTMLElement) {
+      this.props.handleTag(event.target.innerText);
+    }
+  };
+
+  render() {
     return (
       <div>
+        <Typography gutterBottom component="h5" color="primary">
+          Populer Tags
+        </Typography>
         {this.props.tags.map((item: string, i: number) => (
           <Chip
-            key={i}
+            key={item}
             label={item}
-            onClick={this.props.clicked}
+            onClick={this.onClick}
             className="tag"
           />
         ))}

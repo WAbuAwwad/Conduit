@@ -3,16 +3,16 @@ import { Component } from "react";
 import "./style.css";
 import { Link } from "@reach/router";
 import Button from "@material-ui/core/Button";
+import { RouteComponentProps } from "@reach/router";
 
 type Props = {
-  path: string;
   signIn: (event: React.FormEvent) => void;
   email: string;
   password: string;
   changeEmail: (event: React.ChangeEvent<HTMLInputElement>) => void;
   changePassword: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
-class SignIn extends Component<Props> {
+class SignIn extends Component<Props & RouteComponentProps> {
   public render() {
     return (
       <div className="signcontainer">

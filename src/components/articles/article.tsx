@@ -12,7 +12,7 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import Chip from "@material-ui/core/Chip";
 import "./style.css";
 
-type Props = {
+interface Props {
   username: string;
   date: string;
   image: string;
@@ -21,10 +21,16 @@ type Props = {
   fav: boolean;
   favCount: number;
   tags: [];
-  handleTag: (event: React.MouseEvent<HTMLElement>) => void;
-};
+  handleTag: (tag: string) => void;
+}
 
 function Article(props: Props) {
+  function onClick(event: React.MouseEvent<HTMLElement>): void {
+    if (event.target instanceof HTMLElement) {
+      props.handleTag(event.target.innerText);
+    }
+  }
+
   return (
     <Card className="card">
       <CardHeader
@@ -50,8 +56,8 @@ function Article(props: Props) {
         <Button size="small" color="primary">
           Learn More
         </Button>
-        {props.tags.map((item: string, i: number) => (
-          <Chip key={i} label={item} onClick={props.handleTag} />
+        {props.tags.map((item: string) => (
+          <Chip key={item} label={item} onClick={onClick} />
         ))}
       </CardActions>
     </Card>

@@ -2,19 +2,18 @@ import * as React from "react";
 import { Component } from "react";
 import Article from "../articles/article";
 
-type props = {
-  url: string;
-  handleTag: (event: React.MouseEvent<HTMLElement>) => void;
+interface props {
+  handleTag: (tag: string) => void;
   data: string[];
-};
+}
 
 class Articles extends Component<props> {
-  public render() {
+  render() {
     return (
       <div>
         {this.props.data.map((item: any, i: number) => (
           <Article
-            key={i}
+            key={item.key}
             username={item.username}
             date={item.date}
             image={item.image}

@@ -1,108 +1,111 @@
 import * as React from "react";
 import { Component } from "react";
 import Grid from "@material-ui/core/Grid";
-import Menu from "../menu/menu";
 import Articles from "../articles/articles";
 import Tags from "../tags/tags";
 import Pages from "../pages/pages";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import { RouteComponentProps } from "@reach/router";
 
-type Props = {
-  path: string;
-};
-class Home extends Component<Props> {
-  public state = {
-    url: "https://conduit.productionready.io/api/articles?limit=10&offset=0",
-    data: [],
-    tags: []
+function fetchArticles(offset: number) {
+  return fetch(
+    "https://conduit.productionready.io/api/articles?limit=10&offset=" + offset
+  )
+    .then(res => res.json())
+    .then(data => {
+      return data.articles.map((item: any) => {
+        return {
+          username: item.author.username,
+          date: item.createdAt,
+          image: item.author.image,
+          title: item.title,
+          desc: item.description,
+          favCount: item.favoritesCount,
+          fav: item.favorited,
+          tags: item.tagList,
+          key: item.slug
+        };
+      });
+    })
+    .catch(function() {
+      console.log("Error in fetching data");
+    });
+}
+function fetchTags() {
+  return fetch("https://conduit.productionready.io/api/tags")
+    .then(res => res.json())
+    .then(data => {
+      return data.tags;
+    })
+    .catch(function() {
+      console.log("Error in fetching tags");
+    });
+}
+
+function changeTag(tag: string) {
+  return fetch(
+    "https://conduit.productionready.io/api/articles?limit=10&offset=0&tag=" +
+      tag
+  )
+    .then(res => res.json())
+    .then(data => {
+      return data.articles.map((item: any) => {
+        return {
+          username: item.author.username,
+          date: item.createdAt,
+          image: item.author.image,
+          title: item.title,
+          desc: item.description,
+          favCount: item.favoritesCount,
+          fav: item.favorited,
+          tags: item.tagList,
+          key: item.slug
+        };
+      });
+    })
+    .catch(function() {
+      console.log("Error in fetching data");
+    });
+}
+
+class Home extends Component<RouteComponentProps> {
+  state = {
+    articles: [],
+    tags: [],
+    offset: 0
   };
 
-  public componentDidMount() {
-    fetch("https://conduit.productionready.io/api/tags") // Call the fetch function passing the url of the API as a parameter
-      .then(res => res.json()) //response type
-      .then(data => {
-        this.setState({ tags: data.tags });
-      })
-      .catch(function() {
-        console.log("Error in fetching tags");
-      });
-    fetch(this.state.url) // Call the fetch function passing the url of the API as a parameter
-      .then(res => res.json()) //response type
-      .then(data => {
-        var temp = [{ username: "", date: "", image: "", title: "", desc: "" }];
-        data.articles.map((item: any, i: number) => {
-          var el = {
-            username: item.author.username,
-            date: item.createdAt,
-            image: item.author.image,
-            title: item.title,
-            desc: item.description,
-            favCount: item.favoritesCount,
-            fav: item.favorited,
-            tags: item.tagList
-          };
-          temp.push(el);
-        });
-        this.setState({ data: temp.slice(1) });
-      })
-      .catch(function() {
-        console.log("Error in fetching tags");
-      });
+  componentDidMount() {
+    fetchTags().then(data => {
+      this.setState({ tags: data });
+    });
+
+    fetchArticles(this.state.offset).then(data => {
+      this.setState({ articles: data });
+    });
   }
 
-  public componentDidUpdate() {
-    fetch(this.state.url)
-      .then(res => res.json())
-      .then(data => {
-        var temp = [{ username: "", date: "", image: "", title: "", desc: "" }];
-        data.articles.map((item: any, i: number) => {
-          var el = {
-            username: item.author.username,
-            date: item.createdAt,
-            image: item.author.image,
-            title: item.title,
-            desc: item.description,
-            favCount: item.favoritesCount,
-            fav: item.favorited,
-            tags: item.tagList
-          };
-          temp.push(el);
-        });
-        this.setState({ data: temp.slice(1) });
-      })
-      .catch(function() {
-        console.log("Error in fetching tags");
-      });
+  componentDidUpdate() {
+    fetchArticles(this.state.offset).then(data => {
+      this.setState({ articles: data });
+    });
   }
 
-  changePage = (event: React.MouseEvent<HTMLElement>): void => {
-    if (event.target instanceof HTMLElement) {
-      this.setState({
-        url:
-          "https://conduit.productionready.io/api/articles?limit=10&offset=" +
-          (+event.target.innerHTML * 10 - 10)
-      });
-    }
+  changePage = (page: number): void => {
+    this.setState({ page: page * 10 - 10 });
   };
 
-  handleTag = (event: React.MouseEvent<HTMLElement>): void => {
-    if (event.target instanceof HTMLElement) {
-      this.setState({
-        url:
-          "https://conduit.productionready.io/api/articles?limit=10&offset=0&tag=" +
-          event.target.innerText
-      });
-    }
+  handleTag = (tag: string): void => {
+    changeTag(tag).then(data => {
+      this.setState({ articles: data });
+    });
   };
 
   render() {
     return (
       <div>
         <Grid container spacing={8}>
-          <Grid item xs={12}>
-            <Menu loggedIn={false} />
-          </Grid>
           <Grid item xs={1} />
           <Grid item xs={8}>
             <Tabs value={0} indicatorColor="primary" textColor="primary">
@@ -112,18 +115,14 @@ class Home extends Component<Props> {
           <Grid item xs={3} />
           <Grid item xs={1} />
           <Grid item xs={8}>
-            <Articles
-              data={this.state.data}
-              url={this.state.url}
-              handleTag={this.handleTag}
-            />
+            <Articles data={this.state.articles} handleTag={this.handleTag} />
           </Grid>
           <Grid item xs={3}>
-            <Tags tags={this.state.tags} clicked={this.handleTag} />
+            <Tags tags={this.state.tags} handleTag={this.handleTag} />
           </Grid>
           <Grid item xs={1} />
           <Grid item xs={8}>
-            <Pages change={this.changePage} />
+            <Pages onChangePage={this.changePage} />
           </Grid>
           <Grid item xs={3} />
         </Grid>

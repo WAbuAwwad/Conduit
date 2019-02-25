@@ -10,13 +10,11 @@ import Button from "@material-ui/core/Button";
 type Props = {
   loggedIn: boolean;
   userName?: string;
+  changePath: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
 class Menu extends Component<Props> {
-  state = {
-    loggedIn: this.props.loggedIn
-  };
-  public render() {
+  render() {
     return (
       <div className="root">
         <AppBar position="static">
@@ -25,23 +23,37 @@ class Menu extends Component<Props> {
               Conduit
             </Typography>
 
-            {this.state.loggedIn ? (
+            {this.props.loggedIn ? (
               <div>
-                <Button color="inherit">Home</Button>
+                <Button color="inherit" onClick={this.props.changePath}>
+                  Home
+                </Button>
 
-                <Button color="inherit">New Article</Button>
+                <Button color="inherit" onClick={this.props.changePath}>
+                  New Article
+                </Button>
 
-                <Button color="inherit">Settings</Button>
+                <Button color="inherit" onClick={this.props.changePath}>
+                  Settings
+                </Button>
 
-                <Button color="inherit">{this.props.userName}</Button>
+                <Button color="inherit" onClick={this.props.changePath}>
+                  {this.props.userName}
+                </Button>
               </div>
             ) : (
               <div>
-                <Button color="inherit">Home</Button>
+                <Button color="inherit" onClick={this.props.changePath}>
+                  Home
+                </Button>
 
-                <Button color="inherit">Sign in</Button>
+                <Button color="inherit" onClick={this.props.changePath}>
+                  Sign in
+                </Button>
 
-                <Button color="inherit">Sign up</Button>
+                <Button color="inherit" onClick={this.props.changePath}>
+                  Sign up
+                </Button>
               </div>
             )}
           </Toolbar>

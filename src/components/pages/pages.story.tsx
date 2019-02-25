@@ -5,5 +5,5 @@ import "./style.css";
 
 function change() {}
 storiesOf("pagination ", module).add("pagination", () => (
-  <Pages change={change} />
+  <Pages onChangePage={change} />
 ));
