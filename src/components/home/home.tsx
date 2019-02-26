@@ -27,8 +27,19 @@ class Home extends Component<RouteComponentProps> {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.state.page !== prevProps.page) {
+      fetchArticles(this.state.page).then(data => {
+        this.setState({ articles: data });
+      });
+    }
+  }
+
   changePage = (page: number): void => {
     this.setState({ page });
+    fetchArticles(this.state.page).then(data => {
+      this.setState({ articles: data });
+    });
   };
 
   handleTag = (tag: string): void => {
