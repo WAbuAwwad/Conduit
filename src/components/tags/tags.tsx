@@ -10,12 +10,6 @@ interface Props {
 }
 
 class Tags extends Component<Props> {
-  onClick = (event: React.MouseEvent<HTMLElement>): void => {
-    if (event.target instanceof HTMLElement) {
-      this.props.handleTag(event.target.innerText);
-    }
-  };
-
   render() {
     return (
       <div>
@@ -26,7 +20,7 @@ class Tags extends Component<Props> {
           <Chip
             key={item}
             label={item}
-            onClick={this.onClick}
+            onClick={() => this.props.handleTag(item)}
             className="tag"
           />
         ))}
