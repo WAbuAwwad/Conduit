@@ -37,9 +37,6 @@ class Home extends Component<RouteComponentProps> {
 
   changePage = (page: number): void => {
     this.setState({ page });
-    fetchArticles(this.state.page).then(data => {
-      this.setState({ articles: data });
-    });
   };
 
   handleTag = (tag: string): void => {
