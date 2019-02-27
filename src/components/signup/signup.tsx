@@ -23,13 +23,9 @@ const checkSignup = (username: string, email: string, password: string) => {
     method: "POST",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json; charset=utf-8" }
-  })
-    .then(function(res) {
-      return res.json();
-    })
-    .then(function(data) {
-      return data;
-    });
+  }).then(function(res) {
+    return res.json();
+  });
 };
 class SignUp extends Component<Props & RouteComponentProps> {
   state = {
@@ -42,20 +38,14 @@ class SignUp extends Component<Props & RouteComponentProps> {
   };
 
   changeUsername = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    if (event.target instanceof HTMLInputElement) {
-      this.setState({ username: event.target.value });
-    }
+    this.setState({ username: event.target.value });
   };
 
   changeEmail = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    if (event.target instanceof HTMLInputElement) {
-      this.setState({ email: event.target.value });
-    }
+    this.setState({ email: event.target.value });
   };
   changePassword = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    if (event.target instanceof HTMLInputElement) {
-      this.setState({ password: event.target.value });
-    }
+    this.setState({ password: event.target.value });
   };
   signUp = (event: React.FormEvent) => {
     checkSignup(
@@ -63,8 +53,14 @@ class SignUp extends Component<Props & RouteComponentProps> {
       this.state.email,
       this.state.password
     ).then(data => {
-      if (data.errors == null) this.props.onLogin(true, data.user.username);
-      else {
+      if (data.errors == null) {
+        this.setState({
+          passwordError: "",
+          usernameError: "",
+          emailError: ""
+        });
+        this.props.onLogin(true, data.user.username);
+      } else {
         this.props.onLogin(false);
         if (data.errors.username)
           this.setState({

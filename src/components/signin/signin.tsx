@@ -22,13 +22,9 @@ const login = (email: string, password: string) => {
     method: "POST",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json; charset=utf-8" }
-  })
-    .then(function(res) {
-      return res.json();
-    })
-    .then(function(data) {
-      return data;
-    });
+  }).then(function(res) {
+    return res.json();
+  });
 };
 class SignIn extends Component<Props & RouteComponentProps> {
   state = {
