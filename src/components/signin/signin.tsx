@@ -10,34 +10,32 @@ import Grid from "@material-ui/core/Grid";
 interface Props {
   onLogin: (isLoggedIn: boolean, username?: string) => void;
 }
+const login = (email: string, password: string) => {
+  let data = {
+    user: {
+      email: email,
+      password: password
+    }
+  };
 
+  return fetch("https://conduit.productionready.io/api/users/login", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json; charset=utf-8" }
+  })
+    .then(function(res) {
+      return res.json();
+    })
+    .then(function(data) {
+      return data;
+    });
+};
 class SignIn extends Component<Props & RouteComponentProps> {
   state = {
     email: "",
     password: "",
     fail: false
   };
-
-  login(username: string, password: string) {
-    var data = {
-      user: {
-        email: this.state.email,
-        password: this.state.password
-      }
-    };
-
-    return fetch("https://conduit.productionready.io/api/users/login", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json; charset=utf-8" }
-    })
-      .then(function(res) {
-        return res.json();
-      })
-      .then(function(data) {
-        return data;
-      });
-  }
 
   changeEmail = (event: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ email: event.target.value });
@@ -47,7 +45,7 @@ class SignIn extends Component<Props & RouteComponentProps> {
   };
 
   signIn = (event: React.FormEvent) => {
-    this.login(this.state.email, this.state.password).then(data => {
+    login(this.state.email, this.state.password).then(data => {
       if (data.errors == null) {
         this.props.onLogin(true, data.user.username);
       } else {
