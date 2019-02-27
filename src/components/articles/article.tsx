@@ -25,12 +25,6 @@ interface Props {
 }
 
 function Article(props: Props) {
-  function onClick(event: React.MouseEvent<HTMLElement>): void {
-    if (event.target instanceof HTMLElement) {
-      props.handleTag(event.target.innerText);
-    }
-  }
-
   return (
     <Card className="card">
       <CardHeader
@@ -57,7 +51,7 @@ function Article(props: Props) {
           Learn More
         </Button>
         {props.tags.map((item: string) => (
-          <Chip key={item} label={item} onClick={onClick} />
+          <Chip key={item} label={item} onClick={() => props.handleTag(item)} />
         ))}
       </CardActions>
     </Card>

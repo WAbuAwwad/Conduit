@@ -13,7 +13,7 @@ class Pages extends Component<Props> {
     }
   };
 
-  public render() {
+  render() {
     var numbers = Array.from(Array(50).keys());
     return (
       <div>

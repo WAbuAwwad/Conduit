@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 
 type Props = {
   loggedIn: boolean;
-  userName?: string;
+  username?: string;
 };
 
 class Menu extends Component<Props> {
@@ -26,7 +26,7 @@ class Menu extends Component<Props> {
                 <Button color="inherit">Home</Button>
                 <Button color="inherit">New Article</Button>
                 <Button color="inherit">Settings</Button>
-                <Button color="inherit">{this.props.userName}</Button>
+                <Button color="inherit">{this.props.username}</Button>
               </div>
             ) : (
               <div>
