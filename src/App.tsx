@@ -4,6 +4,7 @@ import { Router, navigate } from "@reach/router";
 import Grid from "@material-ui/core/Grid";
 import Menu from "./components/menu/menu";
 import SignIn from "./components/signin/signin";
+import SignUp from "./components/signup/signup";
 
 class App extends Component {
   state = {
@@ -32,6 +33,7 @@ class App extends Component {
           <Router>
             <Home path="/" />
             <SignIn path="sign-in" onLogin={this.handleLogin} />
+            <SignUp path="sign-up" onLogin={this.handleLogin} />
           </Router>
         </Grid>
       </Grid>

@@ -10,15 +10,16 @@ import Grid from "@material-ui/core/Grid";
 interface Props {
   onLogin: (isLoggedIn: boolean, username?: string) => void;
 }
-const login = (email: string, password: string) => {
+const checkSignup = (username: string, email: string, password: string) => {
   let data = {
     user: {
       email: email,
-      password: password
+      password: password,
+      username: username
     }
   };
 
-  return fetch("https://conduit.productionready.io/api/users/login", {
+  return fetch("https://conduit.productionready.io/api/users", {
     method: "POST",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json; charset=utf-8" }
@@ -26,11 +27,18 @@ const login = (email: string, password: string) => {
     return res.json();
   });
 };
-class SignIn extends Component<Props & RouteComponentProps> {
+class SignUp extends Component<Props & RouteComponentProps> {
   state = {
+    username: "",
     email: "",
     password: "",
-    fail: false
+    usernameError: "",
+    emailError: "",
+    passwordError: ""
+  };
+
+  changeUsername = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setState({ username: event.target.value });
   };
 
   changeEmail = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -39,14 +47,33 @@ class SignIn extends Component<Props & RouteComponentProps> {
   changePassword = (event: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ password: event.target.value });
   };
-
-  signIn = (event: React.FormEvent) => {
-    login(this.state.email, this.state.password).then(data => {
+  signUp = (event: React.FormEvent) => {
+    checkSignup(
+      this.state.username,
+      this.state.email,
+      this.state.password
+    ).then(data => {
       if (data.errors == null) {
+        this.setState({
+          passwordError: "",
+          usernameError: "",
+          emailError: ""
+        });
         this.props.onLogin(true, data.user.username);
       } else {
         this.props.onLogin(false);
-        this.setState({ fail: true });
+        if (data.errors.username)
+          this.setState({
+            usernameError: "username " + data.errors.username
+          });
+        if (data.errors.email)
+          this.setState({
+            emailError: "email " + data.errors.email
+          });
+        if (data.errors.password)
+          this.setState({
+            passwordError: "password " + data.errors.password
+          });
       }
     });
     event.preventDefault();
@@ -64,20 +91,31 @@ class SignIn extends Component<Props & RouteComponentProps> {
             color="primary"
             className="txt"
           >
-            Sign In
+            Sign Up
           </Typography>
-          <Link to="/sign-up">
+          <Link to="/sign-in">
             <Typography gutterBottom className="txt">
-              need an account?
+              have an account?
             </Typography>
           </Link>
-          {this.state.fail ? (
-            <Typography gutterBottom variant="h6" color="error">
-              Invalid email or password
-            </Typography>
-          ) : null}
+          <Typography gutterBottom variant="h6" color="error">
+            {this.state.usernameError} <br />
+            {this.state.emailError}
+            <br />
+            {this.state.passwordError}
+          </Typography>
 
-          <form onSubmit={this.signIn}>
+          <form onSubmit={this.signUp}>
+            <TextField
+              placeholder="username"
+              fullWidth
+              margin="normal"
+              variant="filled"
+              required
+              type="text"
+              onChange={this.changeUsername}
+              value={this.state.username}
+            />
             <TextField
               placeholder="email"
               fullWidth
@@ -105,7 +143,7 @@ class SignIn extends Component<Props & RouteComponentProps> {
               color="primary"
               style={{ marginLeft: "45%" }}
             >
-              sign In
+              sign Up
             </Button>
           </form>
         </Grid>
@@ -115,4 +153,4 @@ class SignIn extends Component<Props & RouteComponentProps> {
   }
 }
 
-export default SignIn;
+export default SignUp;
