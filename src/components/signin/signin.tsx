@@ -8,7 +8,7 @@ import "./style.css";
 import Grid from "@material-ui/core/Grid";
 
 interface Props {
-  loggedIn: (isLoggedIn: boolean, username?: string) => void;
+  onLogin: (isLoggedIn: boolean, username?: string) => void;
 }
 
 class SignIn extends Component<Props & RouteComponentProps> {
@@ -18,18 +18,7 @@ class SignIn extends Component<Props & RouteComponentProps> {
     fail: false
   };
 
-  changeEmail = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    if (event.target instanceof HTMLInputElement) {
-      this.setState({ email: event.target.value });
-    }
-  };
-  changePassword = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    if (event.target instanceof HTMLInputElement) {
-      this.setState({ password: event.target.value });
-    }
-  };
-  signIn = (event: React.FormEvent) => {
-    var that = this;
+  login(username: string, password: string) {
     var data = {
       user: {
         email: this.state.email,
@@ -37,7 +26,7 @@ class SignIn extends Component<Props & RouteComponentProps> {
       }
     };
 
-    fetch("https://conduit.productionready.io/api/users/login", {
+    return fetch("https://conduit.productionready.io/api/users/login", {
       method: "POST",
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json; charset=utf-8" }
@@ -46,12 +35,26 @@ class SignIn extends Component<Props & RouteComponentProps> {
         return res.json();
       })
       .then(function(data) {
-        if (data.errors == null) that.props.loggedIn(true, data.user.username);
-        else {
-          that.props.loggedIn(false);
-          that.setState({ fail: true });
-        }
+        return data;
       });
+  }
+
+  changeEmail = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setState({ email: event.target.value });
+  };
+  changePassword = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setState({ password: event.target.value });
+  };
+
+  signIn = (event: React.FormEvent) => {
+    this.login(this.state.email, this.state.password).then(data => {
+      if (data.errors == null) {
+        this.props.onLogin(true, data.user.username);
+      } else {
+        this.props.onLogin(false);
+        this.setState({ fail: true });
+      }
+    });
     event.preventDefault();
   };
 

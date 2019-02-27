@@ -4,5 +4,5 @@ import SignIn from "../signin/signin";
 
 function loggedIn(isLoggedIn) {}
 storiesOf("sign in", module).add("sign in", () => (
-  <SignIn loggedIn={loggedIn} />
+  <SignIn onLogin={loggedIn} />
 ));
