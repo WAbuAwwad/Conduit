@@ -5,6 +5,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import { navigate } from "@reach/router";
 
 type Props = {
   loggedIn: boolean;
@@ -23,16 +24,30 @@ class Menu extends Component<Props> {
 
             {this.props.loggedIn ? (
               <div>
-                <Button color="inherit">Home</Button>
-                <Button color="inherit">New Article</Button>
-                <Button color="inherit">Settings</Button>
-                <Button color="inherit">{this.props.username}</Button>
+                <Button color="inherit" onClick={() => navigate("/")}>
+                  Home
+                </Button>
+                <Button color="inherit" onClick={() => navigate("/")}>
+                  New Article
+                </Button>
+                <Button color="inherit" onClick={() => navigate("/")}>
+                  Settings
+                </Button>
+                <Button color="inherit" onClick={() => navigate("/")}>
+                  {this.props.username}
+                </Button>
               </div>
             ) : (
               <div>
-                <Button color="inherit">Home</Button>
-                <Button color="inherit">Sign in</Button>
-                <Button color="inherit">Sign up</Button>
+                <Button color="inherit" onClick={() => navigate("/")}>
+                  Home
+                </Button>
+                <Button color="inherit" onClick={() => navigate("/sign-in")}>
+                  Sign in
+                </Button>
+                <Button color="inherit" onClick={() => navigate("sign-up")}>
+                  Sign up
+                </Button>
               </div>
             )}
           </Toolbar>

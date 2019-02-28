@@ -7,15 +7,19 @@ import Pages from "../pages/pages";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { RouteComponentProps } from "@reach/router";
-import { fetchTags } from "./API";
-import { fetchArticles } from "./API";
-import { changeTag } from "./API";
+import { fetchTags, fetchArticles, changeTag, fetchFeedArticles } from "./API";
 
-class Home extends Component<RouteComponentProps> {
+interface Props {
+  isLoggedIn: boolean;
+  token: string;
+}
+class Home extends Component<RouteComponentProps & Props> {
   state = {
+    tab: 0,
     articles: [],
     tags: [],
-    page: 0
+    page: 0,
+    feedArticles: []
   };
 
   componentDidMount() {
@@ -25,10 +29,15 @@ class Home extends Component<RouteComponentProps> {
     fetchArticles(this.state.page).then(data => {
       this.setState({ articles: data });
     });
+    if (this.props.isLoggedIn) {
+      fetchFeedArticles(this.state.page, this.props.token).then(data => {
+        this.setState({ feedArticles: data });
+      });
+    }
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.state.page !== prevProps.page) {
+  componentDidUpdate(prevState) {
+    if (this.state.page !== prevState.page) {
       fetchArticles(this.state.page).then(data => {
         this.setState({ articles: data });
       });
@@ -44,21 +53,36 @@ class Home extends Component<RouteComponentProps> {
       this.setState({ articles: data });
     });
   };
-
+  handleChangeTab = (event, value) => {
+    this.setState({ tab: value });
+  };
   render() {
     return (
       <div>
         <Grid container spacing={8}>
           <Grid item xs={1} />
           <Grid item xs={8}>
-            <Tabs value={0} indicatorColor="primary" textColor="primary">
+            <Tabs
+              value={this.state.tab}
+              onChange={this.handleChangeTab}
+              indicatorColor="primary"
+              textColor="primary"
+            >
               <Tab label="Global Feed" />
+              {this.props.isLoggedIn ? <Tab label="Your Feed" /> : null}
             </Tabs>
           </Grid>
           <Grid item xs={3} />
           <Grid item xs={1} />
           <Grid item xs={8}>
-            <Articles data={this.state.articles} handleTag={this.handleTag} />
+            {this.state.tab ? (
+              <Articles
+                data={this.state.feedArticles}
+                handleTag={this.handleTag}
+              />
+            ) : (
+              <Articles data={this.state.articles} handleTag={this.handleTag} />
+            )}
           </Grid>
           <Grid item xs={3}>
             <Tags tags={this.state.tags} handleTag={this.handleTag} />

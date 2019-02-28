@@ -8,7 +8,7 @@ import "./style.css";
 import Grid from "@material-ui/core/Grid";
 
 interface Props {
-  onLogin: (isLoggedIn: boolean, username?: string) => void;
+  onLogin: (isLoggedIn: boolean, username?: string, token?: string) => void;
 }
 const checkSignup = (username: string, email: string, password: string) => {
   let data = {
@@ -59,7 +59,7 @@ class SignUp extends Component<Props & RouteComponentProps> {
           usernameError: "",
           emailError: ""
         });
-        this.props.onLogin(true, data.user.username);
+        this.props.onLogin(true, data.user.username, data.user.token);
       } else {
         this.props.onLogin(false);
         if (data.errors.username)
