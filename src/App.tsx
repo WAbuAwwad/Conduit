@@ -5,17 +5,18 @@ import Grid from "@material-ui/core/Grid";
 import Menu from "./components/menu/menu";
 import SignIn from "./components/signin/signin";
 import SignUp from "./components/signup/signup";
+import NewArticle from "./components/new article/newArticle";
 
 class App extends Component {
   state = {
     isLoggedIn: false,
     username: "",
-    currentPath: ""
+    token: ""
   };
 
-  handleLogin = (isLoggedIn: boolean, username?: string) => {
+  handleLogin = (isLoggedIn: boolean, username?: string, token?: string) => {
     if (isLoggedIn) {
-      this.setState({ isLoggedIn, username });
+      this.setState({ isLoggedIn, username, token });
       navigate("/");
     }
   };
@@ -31,9 +32,14 @@ class App extends Component {
         </Grid>
         <Grid item xs={12}>
           <Router>
-            <Home path="/" />
+            <Home
+              path="/"
+              isLoggedIn={this.state.isLoggedIn}
+              token={this.state.token}
+            />
             <SignIn path="sign-in" onLogin={this.handleLogin} />
             <SignUp path="sign-up" onLogin={this.handleLogin} />
+            <NewArticle path="new-article" token={this.state.token} />
           </Router>
         </Grid>
       </Grid>
