@@ -27,7 +27,7 @@ class Menu extends Component<Props> {
                 <Button color="inherit" onClick={() => navigate("/")}>
                   Home
                 </Button>
-                <Button color="inherit" onClick={() => navigate("/")}>
+                <Button color="inherit" onClick={() => navigate("new-article")}>
                   New Article
                 </Button>
                 <Button color="inherit" onClick={() => navigate("/")}>
