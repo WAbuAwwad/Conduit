@@ -1,4 +1,4 @@
-export function fetchArticles(page: number) {
+export const fetchArticles = (page: number) => {
   var offset;
   if (page > 0) offset = page * 10 - 10;
   else offset = 0;
@@ -25,8 +25,8 @@ export function fetchArticles(page: number) {
     .catch(function() {
       console.log("Error in fetching data");
     });
-}
-export function fetchTags() {
+};
+export const fetchTags = () => {
   return fetch("https://conduit.productionready.io/api/tags")
     .then(res => res.json())
     .then(data => {
@@ -35,9 +35,9 @@ export function fetchTags() {
     .catch(function() {
       console.log("Error in fetching tags");
     });
-}
+};
 
-export function changeTag(tag: string) {
+export const changeTag = (tag: string) => {
   return fetch(
     "https://conduit.productionready.io/api/articles?limit=10&offset=0&tag=" +
       tag
@@ -61,9 +61,9 @@ export function changeTag(tag: string) {
     .catch(function() {
       console.log("Error in fetching data");
     });
-}
+};
 
-export function fetchFeedArticles(page: number, token: string) {
+export const fetchFeedArticles = (page: number) => {
   var offset;
   if (page > 0) offset = page * 10 - 10;
   else offset = 0;
@@ -72,7 +72,7 @@ export function fetchFeedArticles(page: number, token: string) {
       offset,
     {
       headers: {
-        Authorization: "Token " + token
+        Authorization: "Token " + localStorage.getItem("token")
       },
       credentials: "include"
     }
@@ -96,4 +96,24 @@ export function fetchFeedArticles(page: number, token: string) {
     .catch(function() {
       console.log("Error in fetching data");
     });
-}
+};
+
+export const checkLoggedIn = () => {
+  return fetch(
+    "https://conduit.productionready.io/api/user",
+
+    {
+      headers: {
+        Authorization: "Token " + localStorage.getItem("token")
+      },
+      credentials: "include"
+    }
+  )
+    .then(res => {
+      if (res.ok) return res.json();
+      else return null;
+    })
+    .catch(function() {
+      console.log("Error in fetching data");
+    });
+};

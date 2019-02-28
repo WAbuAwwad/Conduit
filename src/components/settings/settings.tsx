@@ -2,77 +2,77 @@ import * as React from "react";
 import { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import { Link, RouteComponentProps, navigate } from "@reach/router";
+import { RouteComponentProps } from "@reach/router";
 import "./style.css";
 import Grid from "@material-ui/core/Grid";
+import { navigate } from "@reach/router";
+import Typography from "@material-ui/core/Typography";
 import Menu from "../menu/menu";
 
-const checkSignup = (username: string, email: string, password: string) => {
+const changeSettings = (
+  email: string,
+  bio: string,
+  image: string,
+  username: string,
+  password: string
+) => {
   let data = {
     user: {
       email: email,
-      password: password,
-      username: username
+      bio: bio,
+      image: image,
+      username: username,
+      password: password
     }
   };
-
-  return fetch("https://conduit.productionready.io/api/users", {
-    method: "POST",
+  fetch("https://conduit.productionready.io/api/user", {
+    method: "PUT",
     body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json; charset=utf-8" }
-  }).then(function(res) {
-    return res.json();
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      Authorization: "Token " + localStorage.getItem("token")
+    },
+    credentials: "include"
   });
 };
-class SignUp extends Component<RouteComponentProps> {
+
+class Settings extends Component<RouteComponentProps> {
   state = {
+    URL: "",
     username: "",
+    bio: "",
     email: "",
-    password: "",
-    usernameError: "",
-    emailError: "",
-    passwordError: ""
+    password: ""
   };
 
+  changeURL = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setState({ URL: event.target.value });
+  };
   changeUsername = (event: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ username: event.target.value });
   };
-
+  changeBio = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setState({ bio: event.target.value });
+  };
   changeEmail = (event: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ email: event.target.value });
   };
   changePassword = (event: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ password: event.target.value });
   };
-  signUp = (event: React.FormEvent) => {
-    checkSignup(
-      this.state.username,
+
+  onLogout = (event: React.MouseEvent<HTMLElement>): void => {
+    localStorage.setItem("token", "");
+    navigate("/");
+  };
+  publishArticle = (event: React.FormEvent) => {
+    changeSettings(
       this.state.email,
+      this.state.bio,
+      this.state.URL,
+      this.state.username,
       this.state.password
-    ).then(data => {
-      if (data.errors == null) {
-        this.setState({
-          passwordError: "",
-          usernameError: "",
-          emailError: ""
-        });
-        localStorage.setItem("token", data.user.token);
-      } else {
-        if (data.errors.username)
-          this.setState({
-            usernameError: "username " + data.errors.username
-          });
-        if (data.errors.email)
-          this.setState({
-            emailError: "email " + data.errors.email
-          });
-        if (data.errors.password)
-          this.setState({
-            passwordError: "password " + data.errors.password
-          });
-      }
-    });
+    );
     event.preventDefault();
     navigate("/");
   };
@@ -94,37 +94,42 @@ class SignUp extends Component<RouteComponentProps> {
               color="primary"
               className="txt"
             >
-              Sign Up
+              Your Settings
             </Typography>
-            <Link to="/sign-in">
-              <Typography gutterBottom className="txt">
-                have an account?
-              </Typography>
-            </Link>
-            <Typography gutterBottom variant="h6" color="error">
-              {this.state.usernameError} <br />
-              {this.state.emailError}
-              <br />
-              {this.state.passwordError}
-            </Typography>
-
-            <form onSubmit={this.signUp}>
+            <form onSubmit={this.publishArticle}>
               <TextField
-                placeholder="username"
+                placeholder="URL for Profile Picture"
                 fullWidth
                 margin="normal"
                 variant="filled"
-                required
+                type="text"
+                onChange={this.changeURL}
+                value={this.state.URL}
+              />
+              <TextField
+                placeholder="user name"
+                fullWidth
+                margin="normal"
+                variant="filled"
                 type="text"
                 onChange={this.changeUsername}
                 value={this.state.username}
+              />
+              <TextField
+                placeholder="short bio about you"
+                fullWidth
+                margin="normal"
+                variant="filled"
+                type="text"
+                multiline
+                onChange={this.changeBio}
+                value={this.state.bio}
               />
               <TextField
                 placeholder="email"
                 fullWidth
                 margin="normal"
                 variant="filled"
-                required
                 type="email"
                 onChange={this.changeEmail}
                 value={this.state.email}
@@ -134,7 +139,6 @@ class SignUp extends Component<RouteComponentProps> {
                 fullWidth
                 margin="normal"
                 variant="filled"
-                required
                 type="password"
                 onChange={this.changePassword}
                 value={this.state.password}
@@ -144,9 +148,18 @@ class SignUp extends Component<RouteComponentProps> {
                 variant="contained"
                 size="medium"
                 color="primary"
-                style={{ marginLeft: "45%" }}
+                style={{ marginLeft: "25%" }}
               >
-                sign Up
+                Change Settings
+              </Button>
+              <Button
+                variant="contained"
+                size="medium"
+                color="secondary"
+                style={{ marginLeft: "5%" }}
+                onClick={this.onLogout}
+              >
+                Log out
               </Button>
             </form>
           </Grid>
@@ -157,4 +170,4 @@ class SignUp extends Component<RouteComponentProps> {
   }
 }
 
-export default SignUp;
+export default Settings;

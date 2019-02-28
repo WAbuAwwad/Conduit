@@ -7,19 +7,23 @@ import Pages from "../pages/pages";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { RouteComponentProps } from "@reach/router";
-import { fetchTags, fetchArticles, changeTag, fetchFeedArticles } from "./API";
+import Menu from "../menu/menu";
+import {
+  fetchTags,
+  fetchArticles,
+  changeTag,
+  fetchFeedArticles,
+  checkLoggedIn
+} from "../../API";
 
-interface Props {
-  isLoggedIn: boolean;
-  token: string;
-}
-class Home extends Component<RouteComponentProps & Props> {
+class Home extends Component<RouteComponentProps> {
   state = {
     tab: 0,
     articles: [],
     tags: [],
     page: 0,
-    feedArticles: []
+    feedArticles: [],
+    isLoggedIn: false
   };
 
   componentDidMount() {
@@ -29,14 +33,18 @@ class Home extends Component<RouteComponentProps & Props> {
     fetchArticles(this.state.page).then(data => {
       this.setState({ articles: data });
     });
-    if (this.props.isLoggedIn) {
-      fetchFeedArticles(this.state.page, this.props.token).then(data => {
-        this.setState({ feedArticles: data });
-      });
-    }
+    checkLoggedIn().then(data => {
+      if (data == null) this.setState({ isLoggedIn: false });
+      else {
+        this.setState({ isLoggedIn: true });
+        fetchFeedArticles(this.state.page).then(data => {
+          this.setState({ feedArticles: data });
+        });
+      }
+    });
   }
 
-  componentDidUpdate(prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.state.page !== prevState.page) {
       fetchArticles(this.state.page).then(data => {
         this.setState({ articles: data });
@@ -58,7 +66,11 @@ class Home extends Component<RouteComponentProps & Props> {
   };
   render() {
     return (
-      <div>
+      <Grid container spacing={8}>
+        <Grid item xs={12}>
+          <Menu />
+        </Grid>
+        <Grid item xs={12} />
         <Grid container spacing={8}>
           <Grid item xs={1} />
           <Grid item xs={8}>
@@ -69,7 +81,7 @@ class Home extends Component<RouteComponentProps & Props> {
               textColor="primary"
             >
               <Tab label="Global Feed" />
-              {this.props.isLoggedIn ? <Tab label="Your Feed" /> : null}
+              {this.state.isLoggedIn ? <Tab label="Your Feed" /> : null}
             </Tabs>
           </Grid>
           <Grid item xs={3} />
@@ -93,7 +105,7 @@ class Home extends Component<RouteComponentProps & Props> {
           </Grid>
           <Grid item xs={3} />
         </Grid>
-      </div>
+      </Grid>
     );
   }
 }

@@ -6,13 +6,21 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { navigate } from "@reach/router";
+import { checkLoggedIn } from "../../API";
 
-type Props = {
-  loggedIn: boolean;
-  username?: string;
-};
+class Menu extends Component {
+  state = {
+    isLoggedIn: false,
+    username: ""
+  };
+  componentDidMount() {
+    checkLoggedIn().then(data => {
+      data == null
+        ? this.setState({ isLoggedIn: false })
+        : this.setState({ isLoggedIn: true, username: data.user.username });
+    });
+  }
 
-class Menu extends Component<Props> {
   render() {
     return (
       <div className="root">
@@ -22,7 +30,7 @@ class Menu extends Component<Props> {
               Conduit
             </Typography>
 
-            {this.props.loggedIn ? (
+            {this.state.isLoggedIn ? (
               <div>
                 <Button color="inherit" onClick={() => navigate("/")}>
                   Home
@@ -30,11 +38,11 @@ class Menu extends Component<Props> {
                 <Button color="inherit" onClick={() => navigate("new-article")}>
                   New Article
                 </Button>
-                <Button color="inherit" onClick={() => navigate("/")}>
+                <Button color="inherit" onClick={() => navigate("settings")}>
                   Settings
                 </Button>
                 <Button color="inherit" onClick={() => navigate("/")}>
-                  {this.props.username}
+                  {this.state.username}
                 </Button>
               </div>
             ) : (
@@ -42,7 +50,7 @@ class Menu extends Component<Props> {
                 <Button color="inherit" onClick={() => navigate("/")}>
                   Home
                 </Button>
-                <Button color="inherit" onClick={() => navigate("/sign-in")}>
+                <Button color="inherit" onClick={() => navigate("sign-in")}>
                   Sign in
                 </Button>
                 <Button color="inherit" onClick={() => navigate("sign-up")}>
