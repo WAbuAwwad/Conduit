@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import Menu from "./components/menu/menu";
 import SignIn from "./components/signin/signin";
 import SignUp from "./components/signup/signup";
+import NewArticle from "./components/new article/newArticle";
 
 class App extends Component {
   state = {
@@ -38,6 +39,7 @@ class App extends Component {
             />
             <SignIn path="sign-in" onLogin={this.handleLogin} />
             <SignUp path="sign-up" onLogin={this.handleLogin} />
+            <NewArticle path="new-article" token={this.state.token} />
           </Router>
         </Grid>
       </Grid>
