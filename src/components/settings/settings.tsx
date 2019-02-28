@@ -62,7 +62,7 @@ class Settings extends Component<RouteComponentProps> {
   };
 
   onLogout = (event: React.MouseEvent<HTMLElement>): void => {
-    localStorage.setItem("token", "");
+    localStorage.removeItem("token");
     navigate("/");
   };
   publishArticle = (event: React.FormEvent) => {
