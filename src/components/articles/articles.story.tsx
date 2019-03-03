@@ -15,5 +15,6 @@ storiesOf("articles", module).add("simple card", () => (
     favCount={3}
     tags={[]}
     handleTag={handle}
+    slug=""
   />
 ));

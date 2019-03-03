@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import Chip from "@material-ui/core/Chip";
 import "./style.css";
+import { navigate } from "@reach/router";
 
 interface Props {
   username: string;
@@ -22,9 +23,14 @@ interface Props {
   favCount: number;
   tags: [];
   handleTag: (tag: string) => void;
+  slug: string;
 }
 
-function Article(props: Props) {
+const Article = (props: Props) => {
+  const onClickArticle = (event: React.MouseEvent<HTMLElement>): void => {
+    navigate("article-page/" + props.slug);
+  };
+
   return (
     <Card className="card">
       <CardHeader
@@ -39,7 +45,7 @@ function Article(props: Props) {
         subheader={props.date.split("T", 1)}
       />
       <CardActionArea>
-        <CardContent>
+        <CardContent onClick={onClickArticle}>
           <Typography gutterBottom variant="h5" component="h2">
             {props.title}
           </Typography>
@@ -56,5 +62,5 @@ function Article(props: Props) {
       </CardActions>
     </Card>
   );
-}
+};
 export default Article;

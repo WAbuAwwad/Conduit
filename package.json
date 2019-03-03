@@ -11,6 +11,7 @@
     "@types/react-dom": "^16.8.2",
     "@types/storybook__react": "^4.0.1",
     "bootstrap": "^4.3.1",
+    "markdown-to-jsx": "^6.9.1",
     "material-ui": "^0.20.2",
     "react": "^16.8.2",
     "react-docgen-typescript-loader": "^3.0.1",
