@@ -6,7 +6,7 @@ import { RouteComponentProps } from "@reach/router";
 import "./style.css";
 import Grid from "@material-ui/core/Grid";
 import { navigate } from "@reach/router";
-import Menu from "../menu/menu";
+
 const publish = (
   title: string,
   desc: string,
@@ -58,9 +58,6 @@ class NewArticle extends Component<RouteComponentProps> {
   render() {
     return (
       <Grid container spacing={8}>
-        <Grid item xs={12}>
-          <Menu />
-        </Grid>
         <Grid item xs={12} />
         <Grid container spacing={16}>
           <Grid item xs={3} />

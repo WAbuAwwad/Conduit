@@ -6,7 +6,6 @@ import Typography from "@material-ui/core/Typography";
 import { Link, RouteComponentProps, navigate } from "@reach/router";
 import "./style.css";
 import Grid from "@material-ui/core/Grid";
-import Menu from "../menu/menu";
 
 const login = (email: string, password: string) => {
   let data = {
@@ -53,9 +52,6 @@ class SignIn extends Component<RouteComponentProps> {
   render() {
     return (
       <Grid container spacing={8}>
-        <Grid item xs={12}>
-          <Menu />
-        </Grid>
         <Grid item xs={12} />
         <Grid container spacing={16}>
           <Grid item xs={3} />
@@ -112,6 +108,7 @@ class SignIn extends Component<RouteComponentProps> {
               </Button>
             </form>
           </Grid>
+
           <Grid item xs={3} />
         </Grid>
       </Grid>
