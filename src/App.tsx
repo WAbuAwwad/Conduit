@@ -6,6 +6,7 @@ import SignUp from "./components/signup/signup";
 import NewArticle from "./components/new article/newArticle";
 import Settings from "./components/settings/settings";
 import { RouteComponentProps } from "@reach/router";
+import ArticlePage from "./components/article/ArticlePage";
 
 class App extends Component<RouteComponentProps> {
   render() {
@@ -16,6 +17,7 @@ class App extends Component<RouteComponentProps> {
         <SignUp path="sign-up" />
         <NewArticle path="new-article" />
         <Settings path="settings" />
+        <ArticlePage path="article-page/:slug" />
       </Router>
     );
   }
