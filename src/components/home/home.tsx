@@ -8,6 +8,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { RouteComponentProps } from "@reach/router";
 import { Consumer } from "../../context";
+
 import {
   fetchTags,
   fetchArticles,
@@ -22,10 +23,11 @@ class Home extends Component<RouteComponentProps> {
     tags: [],
     page: 0,
     feedArticles: [],
-    isLoggedIn: false
+    isLoading: true
   };
 
   componentDidMount() {
+    this.setState({ isLoading: false });
     fetchTags().then(data => {
       this.setState({ tags: data });
     });
@@ -62,7 +64,9 @@ class Home extends Component<RouteComponentProps> {
     this.setState({ tab: value });
   };
   render() {
-    return (
+    return this.state.isLoading ? (
+      <img src="./805.gif" alt="loading..." />
+    ) : (
       <Grid container spacing={8}>
         <Grid item xs={12} />
         <Grid container spacing={8}>
