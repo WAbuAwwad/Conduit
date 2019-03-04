@@ -27,6 +27,7 @@ class Home extends Component<RouteComponentProps> {
   };
 
   componentDidMount() {
+    const that = this;
     fetchTags().then(data => {
       this.setState({ tags: data });
     });
@@ -35,7 +36,7 @@ class Home extends Component<RouteComponentProps> {
         this.setState({ articles: data });
       })
       .finally(function() {
-        this.setState({ isLoading: false });
+        that.setState({ isLoading: false });
       });
 
     fetchFeedArticles(this.state.page).then(data => {
@@ -68,7 +69,13 @@ class Home extends Component<RouteComponentProps> {
   };
   render() {
     return this.state.isLoading ? (
-      <img src="./805.gif" alt="loading..." />
+      <div>
+        <img
+          src="./805.gif"
+          alt="loading..."
+          style={{ position: "absolute", top: "50%", left: "40%" }}
+        />
+      </div>
     ) : (
       <Grid container spacing={8}>
         <Grid item xs={12} />
