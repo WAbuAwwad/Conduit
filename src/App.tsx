@@ -16,13 +16,14 @@ class App extends Component<RouteComponentProps> {
     isLoggedIn: false,
     username: ""
   };
-
-  render() {
+  componentDidMount() {
     checkLoggedIn().then(data => {
       data == null
         ? this.setState({ isLoggedIn: false })
         : this.setState({ isLoggedIn: true, username: data.user.username });
     });
+  }
+  render() {
     return (
       <Provider value={this.state}>
         <Menu />

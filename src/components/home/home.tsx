@@ -27,7 +27,6 @@ class Home extends Component<RouteComponentProps> {
   };
 
   componentDidMount() {
-    const that = this;
     fetchTags().then(data => {
       this.setState({ tags: data });
     });
@@ -35,9 +34,7 @@ class Home extends Component<RouteComponentProps> {
       .then(data => {
         this.setState({ articles: data });
       })
-      .finally(function() {
-        that.setState({ isLoading: false });
-      });
+      .finally(() => this.setState({ isLoading: false }));
 
     fetchFeedArticles(this.state.page).then(data => {
       this.setState({ feedArticles: data });
