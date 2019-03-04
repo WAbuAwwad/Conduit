@@ -15,14 +15,10 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { navigate } from "@reach/router";
-import {
-  fetchSingleArticel,
-  fetchComments,
-  checkLoggedIn,
-  postComment
-} from "../../API";
+import { fetchSingleArticel, fetchComments, postComment } from "../../API";
 import Chip from "@material-ui/core/Chip";
 import { compiler } from "markdown-to-jsx";
+import { Consumer } from "../../context";
 
 class ArticlePage extends Component<RouteComponentProps<{ slug: string }>> {
   state = {
@@ -39,7 +35,6 @@ class ArticlePage extends Component<RouteComponentProps<{ slug: string }>> {
       tags: []
     },
     comments: [],
-    isLoggedIn: true,
     comment: ""
   };
 
@@ -58,12 +53,6 @@ class ArticlePage extends Component<RouteComponentProps<{ slug: string }>> {
     fetchComments(this.props.slug).then(data =>
       this.setState({ comments: data })
     );
-    checkLoggedIn().then(data => {
-      if (data == null) this.setState({ isLoggedIn: false });
-      else {
-        this.setState({ isLoggedIn: true });
-      }
-    });
   }
   render() {
     return (
@@ -144,45 +133,49 @@ class ArticlePage extends Component<RouteComponentProps<{ slug: string }>> {
                 </CardActionArea>
               </Card>
             ))}
-            {!this.state.isLoggedIn ? (
-              <Typography gutterBottom color="primary" className="txt">
-                <Link to="/sign-in" style={{ margin: "2px" }}>
-                  Sign in{" "}
-                </Link>
-                or
-                <Link to="/sign-up" style={{ margin: "2px" }}>
-                  Sign up
-                </Link>
-                to post a comment
-              </Typography>
-            ) : (
-              <form onSubmit={this.postComment}>
-                <TextField
-                  placeholder="leave a comment"
-                  margin="normal"
-                  variant="outlined"
-                  required
-                  type="text"
-                  multiline
-                  style={{ width: "89%" }}
-                  onChange={this.changeComment}
-                  value={this.state.comment}
-                />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  size="large"
-                  color="primary"
-                  style={{
-                    width: "10%",
-                    marginLeft: "2px",
-                    marginTop: "20px"
-                  }}
-                >
-                  post
-                </Button>
-              </form>
-            )}
+            <Consumer>
+              {context =>
+                !context.isLoggedIn ? (
+                  <Typography gutterBottom color="primary" className="txt">
+                    <Link to="/sign-in" style={{ margin: "2px" }}>
+                      Sign in{" "}
+                    </Link>
+                    or
+                    <Link to="/sign-up" style={{ margin: "2px" }}>
+                      Sign up
+                    </Link>
+                    to post a comment
+                  </Typography>
+                ) : (
+                  <form onSubmit={this.postComment}>
+                    <TextField
+                      placeholder="leave a comment"
+                      margin="normal"
+                      variant="outlined"
+                      required
+                      type="text"
+                      multiline
+                      style={{ width: "89%" }}
+                      onChange={this.changeComment}
+                      value={this.state.comment}
+                    />
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      size="large"
+                      color="primary"
+                      style={{
+                        width: "10%",
+                        marginLeft: "2px",
+                        marginTop: "20px"
+                      }}
+                    >
+                      post
+                    </Button>
+                  </form>
+                )
+              }
+            </Consumer>
           </Grid>
 
           <Grid item xs={2} />
