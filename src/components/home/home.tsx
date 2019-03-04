@@ -27,13 +27,16 @@ class Home extends Component<RouteComponentProps> {
   };
 
   componentDidMount() {
-    this.setState({ isLoading: false });
     fetchTags().then(data => {
       this.setState({ tags: data });
     });
-    fetchArticles(this.state.page).then(data => {
-      this.setState({ articles: data });
-    });
+    fetchArticles(this.state.page)
+      .then(data => {
+        this.setState({ articles: data });
+      })
+      .finally(function() {
+        this.setState({ isLoading: false });
+      });
 
     fetchFeedArticles(this.state.page).then(data => {
       this.setState({ feedArticles: data });
