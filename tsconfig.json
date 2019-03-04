@@ -1,23 +1,15 @@
 {
   "compilerOptions": {
+    "typeRoots": ["node_modules/@types"],
     "outDir": "build/lib",
     "module": "esnext",
     "target": "es5",
-    "lib": [
-      "es5",
-      "es6",
-      "es7",
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es5", "es6", "es7", "es2017", "dom"],
     "sourceMap": true,
     "allowJs": false,
     "jsx": "preserve",
     "moduleResolution": "node",
-    "rootDirs": [
-      "src",
-      "stories"
-    ],
+    "rootDirs": ["src", "stories"],
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noImplicitThis": false,
@@ -36,12 +28,6 @@
     "noEmit": true,
     "isolatedModules": true
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "build",
-    "scripts"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build", "scripts"]
 }

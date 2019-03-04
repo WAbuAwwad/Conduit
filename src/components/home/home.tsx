@@ -7,13 +7,13 @@ import Pages from "../pages/pages";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { RouteComponentProps } from "@reach/router";
-import Menu from "../menu/menu";
+import { UserConsumer } from "../../context";
+
 import {
   fetchTags,
   fetchArticles,
   changeTag,
-  fetchFeedArticles,
-  checkLoggedIn
+  fetchFeedArticles
 } from "../../API";
 
 class Home extends Component<RouteComponentProps> {
@@ -23,24 +23,21 @@ class Home extends Component<RouteComponentProps> {
     tags: [],
     page: 0,
     feedArticles: [],
-    isLoggedIn: false
+    isLoading: true
   };
 
   componentDidMount() {
     fetchTags().then(data => {
       this.setState({ tags: data });
     });
-    fetchArticles(this.state.page).then(data => {
-      this.setState({ articles: data });
-    });
-    checkLoggedIn().then(data => {
-      if (data == null) this.setState({ isLoggedIn: false });
-      else {
-        this.setState({ isLoggedIn: true });
-        fetchFeedArticles(this.state.page).then(data => {
-          this.setState({ feedArticles: data });
-        });
-      }
+    fetchArticles(this.state.page)
+      .then(data => {
+        this.setState({ articles: data });
+      })
+      .finally(() => this.setState({ isLoading: false }));
+
+    fetchFeedArticles(this.state.page).then(data => {
+      this.setState({ feedArticles: data });
     });
   }
 
@@ -48,6 +45,9 @@ class Home extends Component<RouteComponentProps> {
     if (this.state.page !== prevState.page) {
       fetchArticles(this.state.page).then(data => {
         this.setState({ articles: data });
+      });
+      fetchFeedArticles(this.state.page).then(data => {
+        this.setState({ feedArticles: data });
       });
     }
   }
@@ -65,24 +65,33 @@ class Home extends Component<RouteComponentProps> {
     this.setState({ tab: value });
   };
   render() {
-    return (
+    return this.state.isLoading ? (
+      <div>
+        <img
+          src="./805.gif"
+          alt="loading..."
+          style={{ position: "absolute", top: "50%", left: "40%" }}
+        />
+      </div>
+    ) : (
       <Grid container spacing={8}>
-        <Grid item xs={12}>
-          <Menu />
-        </Grid>
         <Grid item xs={12} />
         <Grid container spacing={8}>
           <Grid item xs={1} />
           <Grid item xs={8}>
-            <Tabs
-              value={this.state.tab}
-              onChange={this.handleChangeTab}
-              indicatorColor="primary"
-              textColor="primary"
-            >
-              <Tab label="Global Feed" />
-              {this.state.isLoggedIn ? <Tab label="Your Feed" /> : null}
-            </Tabs>
+            <UserConsumer>
+              {context => (
+                <Tabs
+                  value={this.state.tab}
+                  onChange={this.handleChangeTab}
+                  indicatorColor="primary"
+                  textColor="primary"
+                >
+                  <Tab label="Global Feed" />
+                  {context.isLoggedIn ? <Tab label="Your Feed" /> : null}
+                </Tabs>
+              )}
+            </UserConsumer>
           </Grid>
           <Grid item xs={3} />
           <Grid item xs={1} />
