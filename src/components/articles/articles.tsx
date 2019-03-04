@@ -13,7 +13,7 @@ class Articles extends Component<props> {
       <div>
         {this.props.data.map((item: any, i: number) => (
           <Article
-            key={item.key}
+            key={item.slug}
             username={item.username}
             date={item.date}
             image={item.image}
@@ -23,6 +23,7 @@ class Articles extends Component<props> {
             favCount={item.favCount}
             tags={item.tags}
             handleTag={this.props.handleTag}
+            slug={item.slug}
           />
         ))}
       </div>

@@ -6,13 +6,9 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { navigate } from "@reach/router";
+import { UserConsumer } from "../../context";
 
-type Props = {
-  loggedIn: boolean;
-  username?: string;
-};
-
-class Menu extends Component<Props> {
+class Menu extends Component {
   render() {
     return (
       <div className="root">
@@ -21,35 +17,44 @@ class Menu extends Component<Props> {
             <Typography variant="h6" color="inherit" className="grow">
               Conduit
             </Typography>
-
-            {this.props.loggedIn ? (
-              <div>
-                <Button color="inherit" onClick={() => navigate("/")}>
-                  Home
-                </Button>
-                <Button color="inherit" onClick={() => navigate("new-article")}>
-                  New Article
-                </Button>
-                <Button color="inherit" onClick={() => navigate("/")}>
-                  Settings
-                </Button>
-                <Button color="inherit" onClick={() => navigate("/")}>
-                  {this.props.username}
-                </Button>
-              </div>
-            ) : (
-              <div>
-                <Button color="inherit" onClick={() => navigate("/")}>
-                  Home
-                </Button>
-                <Button color="inherit" onClick={() => navigate("/sign-in")}>
-                  Sign in
-                </Button>
-                <Button color="inherit" onClick={() => navigate("sign-up")}>
-                  Sign up
-                </Button>
-              </div>
-            )}
+            <UserConsumer>
+              {context =>
+                context.isLoggedIn ? (
+                  <div>
+                    <Button color="inherit" onClick={() => navigate("/")}>
+                      Home
+                    </Button>
+                    <Button
+                      color="inherit"
+                      onClick={() => navigate("new-article")}
+                    >
+                      New Article
+                    </Button>
+                    <Button
+                      color="inherit"
+                      onClick={() => navigate("settings")}
+                    >
+                      Settings
+                    </Button>
+                    <Button color="inherit" onClick={() => navigate("/")}>
+                      {context.username}
+                    </Button>
+                  </div>
+                ) : (
+                  <div>
+                    <Button color="inherit" onClick={() => navigate("/")}>
+                      Home
+                    </Button>
+                    <Button color="inherit" onClick={() => navigate("sign-in")}>
+                      Sign in
+                    </Button>
+                    <Button color="inherit" onClick={() => navigate("sign-up")}>
+                      Sign up
+                    </Button>
+                  </div>
+                )
+              }
+            </UserConsumer>
           </Toolbar>
         </AppBar>
       </div>

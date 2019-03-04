@@ -1,48 +1,41 @@
 import React, { Component } from "react";
 import Home from "./components/home/home";
-import { Router, navigate } from "@reach/router";
-import Grid from "@material-ui/core/Grid";
-import Menu from "./components/menu/menu";
+import { Router } from "@reach/router";
 import SignIn from "./components/signin/signin";
 import SignUp from "./components/signup/signup";
 import NewArticle from "./components/new article/newArticle";
+import Settings from "./components/settings/settings";
+import { RouteComponentProps } from "@reach/router";
+import ArticlePage from "./components/article/ArticlePage";
+import { UserProvider } from "./context";
+import { checkLoggedIn } from "./API";
+import Menu from "./components/menu/menu";
 
-class App extends Component {
+class App extends Component<RouteComponentProps> {
   state = {
     isLoggedIn: false,
-    username: "",
-    token: ""
+    username: ""
   };
-
-  handleLogin = (isLoggedIn: boolean, username?: string, token?: string) => {
-    if (isLoggedIn) {
-      this.setState({ isLoggedIn, username, token });
-      navigate("/");
-    }
-  };
-
+  componentDidMount() {
+    checkLoggedIn().then(data => {
+      data == null
+        ? this.setState({ isLoggedIn: false })
+        : this.setState({ isLoggedIn: true, username: data.user.username });
+    });
+  }
   render() {
     return (
-      <Grid container spacing={8}>
-        <Grid item xs={12}>
-          <Menu
-            loggedIn={this.state.isLoggedIn}
-            username={this.state.username}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Router>
-            <Home
-              path="/"
-              isLoggedIn={this.state.isLoggedIn}
-              token={this.state.token}
-            />
-            <SignIn path="sign-in" onLogin={this.handleLogin} />
-            <SignUp path="sign-up" onLogin={this.handleLogin} />
-            <NewArticle path="new-article" token={this.state.token} />
-          </Router>
-        </Grid>
-      </Grid>
+      <UserProvider value={this.state}>
+        <Menu />
+        <Router>
+          <Home path="/" />
+          <SignIn path="sign-in" />
+          <SignUp path="sign-up" />
+          <NewArticle path="new-article" />
+          <Settings path="settings" />
+          <ArticlePage path="article-page/:slug" />
+        </Router>
+      </UserProvider>
     );
   }
 }
