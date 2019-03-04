@@ -7,7 +7,7 @@ import NewArticle from "./components/new article/newArticle";
 import Settings from "./components/settings/settings";
 import { RouteComponentProps } from "@reach/router";
 import ArticlePage from "./components/article/ArticlePage";
-import { Provider } from "./context";
+import { UserProvider } from "./context";
 import { checkLoggedIn } from "./API";
 import Menu from "./components/menu/menu";
 
@@ -25,7 +25,7 @@ class App extends Component<RouteComponentProps> {
   }
   render() {
     return (
-      <Provider value={this.state}>
+      <UserProvider value={this.state}>
         <Menu />
         <Router>
           <Home path="/" />
@@ -35,7 +35,7 @@ class App extends Component<RouteComponentProps> {
           <Settings path="settings" />
           <ArticlePage path="article-page/:slug" />
         </Router>
-      </Provider>
+      </UserProvider>
     );
   }
 }

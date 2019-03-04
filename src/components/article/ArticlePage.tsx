@@ -18,7 +18,7 @@ import { navigate } from "@reach/router";
 import { fetchSingleArticel, fetchComments, postComment } from "../../API";
 import Chip from "@material-ui/core/Chip";
 import { compiler } from "markdown-to-jsx";
-import { Consumer } from "../../context";
+import { UserConsumer } from "../../context";
 
 class ArticlePage extends Component<RouteComponentProps<{ slug: string }>> {
   state = {
@@ -133,7 +133,7 @@ class ArticlePage extends Component<RouteComponentProps<{ slug: string }>> {
                 </CardActionArea>
               </Card>
             ))}
-            <Consumer>
+            <UserConsumer>
               {context =>
                 !context.isLoggedIn ? (
                   <Typography gutterBottom color="primary" className="txt">
@@ -175,7 +175,7 @@ class ArticlePage extends Component<RouteComponentProps<{ slug: string }>> {
                   </form>
                 )
               }
-            </Consumer>
+            </UserConsumer>
           </Grid>
 
           <Grid item xs={2} />

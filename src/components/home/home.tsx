@@ -7,7 +7,7 @@ import Pages from "../pages/pages";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { RouteComponentProps } from "@reach/router";
-import { Consumer } from "../../context";
+import { UserConsumer } from "../../context";
 
 import {
   fetchTags,
@@ -79,7 +79,7 @@ class Home extends Component<RouteComponentProps> {
         <Grid container spacing={8}>
           <Grid item xs={1} />
           <Grid item xs={8}>
-            <Consumer>
+            <UserConsumer>
               {context => (
                 <Tabs
                   value={this.state.tab}
@@ -91,7 +91,7 @@ class Home extends Component<RouteComponentProps> {
                   {context.isLoggedIn ? <Tab label="Your Feed" /> : null}
                 </Tabs>
               )}
-            </Consumer>
+            </UserConsumer>
           </Grid>
           <Grid item xs={3} />
           <Grid item xs={1} />

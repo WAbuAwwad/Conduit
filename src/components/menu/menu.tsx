@@ -6,7 +6,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { navigate } from "@reach/router";
-import { Consumer } from "../../context";
+import { UserConsumer } from "../../context";
 
 class Menu extends Component {
   render() {
@@ -17,7 +17,7 @@ class Menu extends Component {
             <Typography variant="h6" color="inherit" className="grow">
               Conduit
             </Typography>
-            <Consumer>
+            <UserConsumer>
               {context =>
                 context.isLoggedIn ? (
                   <div>
@@ -54,7 +54,7 @@ class Menu extends Component {
                   </div>
                 )
               }
-            </Consumer>
+            </UserConsumer>
           </Toolbar>
         </AppBar>
       </div>
